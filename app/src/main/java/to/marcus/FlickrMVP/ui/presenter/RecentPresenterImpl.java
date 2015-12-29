@@ -4,14 +4,19 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
+
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.PhotoFactory;
+import to.marcus.FlickrMVP.data.event.GirlImagesReceivedEvent;
+import to.marcus.FlickrMVP.data.event.ImagesGirlRequestedEvent;
 import to.marcus.FlickrMVP.data.event.ImagesReceivedEvent;
-import to.marcus.FlickrMVP.data.event.ImagesRequestedEvent;
 import to.marcus.FlickrMVP.data.interactor.PhotoInteractor;
+import to.marcus.FlickrMVP.model.GirlPhotosResponse;
 import to.marcus.FlickrMVP.model.Photo;
 import to.marcus.FlickrMVP.model.Photos;
 import to.marcus.FlickrMVP.network.PhotoHandler;
@@ -88,7 +93,28 @@ public class RecentPresenterImpl implements RecentPresenter {
     @Override
     public void requestNetworkPhotos(){
         //notify our ApiRequestHandler
-        bus.post(new ImagesRequestedEvent());
+        //bus.post(new ImagesRequestedEvent());
+        bus.post(new ImagesGirlRequestedEvent());
+    }
+
+    @Subscribe
+    public void onGirlImagesArrayReceived(GirlImagesReceivedEvent event){
+
+        ArrayList<Photo> photoList = new ArrayList<>();
+        //private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s){
+
+
+        for (GirlPhotosResponse.ResultsEntity result : event.getResult()) {
+            Photo photo = new Photo(result.getObjectId(),result.getWho(),"","",1,result.getWho(),1,1,1,result.getUrl());
+            photoList.add(photo);
+        }
+
+        this.defaultPhotosArray.setPhotos(photoList);
+        initGridViewAdapter();
+        if(view.isSwipeRefreshing()){
+            view.hideSwipeRefreshWidget();
+        }
+        view.hideProgressBar();
     }
 
     @Subscribe

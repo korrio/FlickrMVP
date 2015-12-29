@@ -11,11 +11,6 @@ import to.marcus.FlickrMVP.ui.presenter.RecentPresenterImpl;
 import to.marcus.FlickrMVP.ui.views.fragments.RecentFragment;
 import to.marcus.FlickrMVP.ui.views.PhotosView;
 
-
-/**
- * Created by marcus on 4/2/2015
- */
-
 @Module(injects = RecentFragment.class,
         addsTo = ApplicationModule.class,
         complete = false

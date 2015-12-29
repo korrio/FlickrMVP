@@ -9,6 +9,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.model.Photo;
@@ -65,7 +68,8 @@ public class PhotoRecyclerAdapter extends RecyclerView.Adapter<PhotoRecyclerAdap
         Photo photo = getItem(position);
         //Start handler thread to get Bitmaps:
         holder.imageView.setImageDrawable(null);
-        mPhotoHandler.queueThumbnail(holder.imageView, photo.getUrl());
+        //mPhotoHandler.queueThumbnail(holder.imageView, photo.getUrl());
+        Picasso.with(context).load(photo.getUrl()).resize(200, 200).centerCrop().into(holder.imageView);
         setAnimation(holder.imageView, position);
         holder.textView.setText(photo.getTitle());
     }

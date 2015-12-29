@@ -1,13 +1,17 @@
 package to.marcus.FlickrMVP.data.event;
 
 import android.util.Log;
+
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import to.marcus.FlickrMVP.model.GirlPhotosResponse;
 import to.marcus.FlickrMVP.model.PhotosResponse;
 import to.marcus.FlickrMVP.network.ApiService;
+import to.marcus.FlickrMVP.network.ApiServiceNew;
 
 /**
  * Created by marcus on 15/04/15
@@ -17,12 +21,28 @@ import to.marcus.FlickrMVP.network.ApiService;
 public class ApiRequestHandler {
     private final Bus bus;
     private final ApiService apiService;
+    private final ApiServiceNew apiServiceNew;
     private static final String TAG = ApiRequestHandler.class.getSimpleName();
 
     //injections 'injected' further via constructor
-    public ApiRequestHandler(Bus bus, ApiService apiService) {
+    public ApiRequestHandler(Bus bus, ApiService apiService,ApiServiceNew apiServiceNew) {
         this.bus = bus;
         this.apiService = apiService;
+        this.apiServiceNew = apiServiceNew;
+    }
+
+    @Subscribe public void onGirlImagesRequested(ImagesGirlRequestedEvent event) {
+        apiServiceNew.getGirlPhoto(new Callback<GirlPhotosResponse>() {
+            @Override
+            public void success(GirlPhotosResponse girlPhotosResponse, Response response) {
+                bus.post(new GirlImagesReceivedEvent(girlPhotosResponse.getResults()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Subscribe

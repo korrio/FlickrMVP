@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import to.marcus.FlickrMVP.R;
 import to.marcus.FlickrMVP.ui.adapter.HomePagerAdapter;
 import to.marcus.FlickrMVP.ui.views.HomeView;
@@ -31,7 +32,7 @@ import to.marcus.FlickrMVP.ui.views.supportwidgets.SlidingTabLayout;
  * Main navigation
  */
 
-public class HomeActivity extends ActionBarActivity implements HomeView {
+public class HomeActivity extends AppCompatActivity implements HomeView {
     private static final String TAG = HomeActivity.class.getSimpleName();
     private HomePagerAdapter mHomePagerAdapter;
     public ViewPager mViewPager;

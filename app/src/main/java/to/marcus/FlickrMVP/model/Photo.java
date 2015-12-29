@@ -27,7 +27,7 @@ public class Photo implements Parcelable {
     @Expose private int isfamily;
     @Expose private String url_s;
 
-    private Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s){
+    public Photo(String id, String owner, String secret, String server, int farm, String title, int ispublic, int isfriend, int isfamily, String url_s){
         this.id = id;
         this.owner = owner;
         this.secret = secret;
@@ -51,7 +51,8 @@ public class Photo implements Parcelable {
     public String getUrl(){return url_s;}
     public String getTitle(){return title;}
     public String getBigUrl(){
-        return url_s.substring(0,((url_s.length()-1)-5))+"_c.jpg";
+        //return url_s.substring(0,((url_s.length()-1)-5))+"_c.jpg";
+        return getUrl();
     }
 
     /**

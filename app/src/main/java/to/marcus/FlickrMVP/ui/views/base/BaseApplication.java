@@ -2,10 +2,14 @@ package to.marcus.FlickrMVP.ui.views.base;
 
 import android.app.Application;
 import android.content.Context;
+
 import com.squareup.otto.Bus;
+
 import java.util.Arrays;
 import java.util.List;
+
 import javax.inject.Inject;
+
 import dagger.ObjectGraph;
 import to.marcus.FlickrMVP.data.PhotoCache;
 import to.marcus.FlickrMVP.data.event.ApiRequestHandler;
@@ -13,6 +17,7 @@ import to.marcus.FlickrMVP.modules.ApplicationModule;
 import to.marcus.FlickrMVP.modules.objectgraph.ObjectGraphCreator;
 import to.marcus.FlickrMVP.modules.objectgraph.ObjectGraphHolder;
 import to.marcus.FlickrMVP.network.ApiService;
+import to.marcus.FlickrMVP.network.ApiServiceNew;
 
 /**
  * Created by marcus on 23/03/15
@@ -22,14 +27,18 @@ public class BaseApplication extends Application {
     private ObjectGraph applicationGraph;
     @Inject Bus bus;
     @Inject ApiService apiService;
+    @Inject
+    ApiServiceNew apiServiceNew;
     @Inject PhotoCache photosCache;
     //added
     @Inject Context mAppContext;
+    private static Context mSharedAppContext;
     ObjectGraph mObjectGraph;
 
     @Override
     public void onCreate(){
         super.onCreate();
+        mSharedAppContext = this;
         buildInitialObjectGraphAndInject();
         createApiRequestHandler();
     }
@@ -42,9 +51,13 @@ public class BaseApplication extends Application {
         return mAppContext;
     }
 
+    public static Context getSharedAppContext() {
+        return mSharedAppContext;
+    }
+
 
     private void createApiRequestHandler(){
-        bus.register(new ApiRequestHandler(bus, apiService));
+        bus.register(new ApiRequestHandler(bus, apiService,apiServiceNew));
     }
 
     public void buildInitialObjectGraphAndInject(){
